@@ -11,12 +11,13 @@ with open('data/driving_log.csv') as csvfile:
 lines = lines[1:] #skip the first headline
 
 from sklearn.model_selection import train_test_split
+from sklearn.utils import shuffle
 train_samples, validation_samples = train_test_split(lines, test_size=0.2)
 
 def generator(samples, batch_size=32):
    num_samples = len(samples)
    while 1: # Loop forever so the generator never terminates
-      shuffle(samples)
+      #shuffle(samples)
       for offset in range(0, num_samples, batch_size):
          batch_samples = samples[offset:offset+batch_size]
          images = []
@@ -35,7 +36,7 @@ def generator(samples, batch_size=32):
          # trim image to only see section with road
          X_train = np.array(images)
          y_train = np.array(measurements)
-         yield sklearn.utils.shuffle(X_train, y_train)
+         yield shuffle(X_train, y_train)
 
 # compile and train the model using the generator function
 train_generator = generator(train_samples, batch_size=32)
@@ -65,8 +66,7 @@ model.add(Dense(50))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
-model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=2)
-model.fit_generator(train_generator, sample_per_epoch=len(train_samples), \
-                     validation_data = validation_generator, nb_val_samples=len(validation_samples), epochs=2)
+#model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=2)
+model.fit_generator(train_generator, samples_per_epoch=len(train_samples), validation_data = validation_generator, nb_val_samples=len(validation_samples), nb_epoch=2)
 
 model.save('model.h5')
