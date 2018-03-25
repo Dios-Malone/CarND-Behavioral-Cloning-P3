@@ -55,19 +55,19 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### 1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network with 5x5 filter sizes and depths between 24 and 64 (model.py lines 64-88) 
+My model consists of a convolution neural network with 5x5 filter sizes and depths between 24 and 64 (model.py lines 64-90) 
 
 The model includes RELU layers to introduce nonlinearity (code line 69, 72, 75, 78, 81), and the data is normalized in the model using a Keras lambda layer (code line 67). 
 
 #### 2. Attempts to reduce overfitting in the model
 
-The model contains pooling layers in order to reduce overfitting (model.py lines 70, 73, 76, 79, 82). 
+The model contains a dropout layer in order to reduce overfitting (model.py lines 88). 
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 93). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 95). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 #### 3. Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 90).
+The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 92).
 
 #### 4. Appropriate training data
 
@@ -83,7 +83,7 @@ My first step was to use a convolution neural network model similar to the model
 
 In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
 
-To combat the overfitting, I modified the model so that max pooling was done between each convolution layer.
+To combat the overfitting, I modified the model so that a dropout layer was added between the fully connected layers.
 
 The final step was to run the simulator to see how well the car was driving around track one. There was one spot where the vehicle fell off the track. It was a place having a mud side-road. To improve the driving behavior in this case, I recorded some more training data at this place and continue training the model with the additional data.
 
@@ -91,7 +91,7 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 #### 2. Final Model Architecture
 
-The final model architecture (model.py lines 64-88) consisted of a convolution neural network with the following layers and layer sizes:
+The final model architecture (model.py lines 64-90) consisted of a convolution neural network with the following layers and layer sizes:
 1. Normalization Layer
 2. Convolution layer with 5x5 kernel and 2x2 strides and 24 filters
 3. RELU Activation Layer
@@ -110,8 +110,9 @@ The final model architecture (model.py lines 64-88) consisted of a convolution n
 16. Max Pooling Layer with 2x2 pool size, no stride and valid padding
 17. Flantten Layer
 18. Fully connected layer with size 100
-19. Fully connected layer with size 50
-20. Fully connected layer with size 1
+19. Dropout layer with rate 0.5
+20. Fully connected layer with size 50
+21. Fully connected layer with size 1
 
 
 #### 3. Creation of the Training Set & Training Process

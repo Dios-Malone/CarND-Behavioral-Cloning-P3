@@ -84,6 +84,7 @@ else:
    model.add(Flatten())
    #Three Fully connected layers
    model.add(Dense(100, activation="relu"))
+   #Dropout Layer
    model.add(Dropout(0.5))
    model.add(Dense(50, activation="relu"))
    model.add(Dense(1))
