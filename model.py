@@ -12,6 +12,9 @@ lines = lines[1:] #skip the first headline
 
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
+
+lines = shuffle(lines)
+
 train_samples, validation_samples = train_test_split(lines, test_size=0.2)
 
 def generator(samples, batch_size=32):
@@ -23,14 +26,14 @@ def generator(samples, batch_size=32):
          images = []
          measurements = []
          for batch_sample in batch_samples:
-            source_path = line[0]
+            source_path = batch_sample[0]
             filename = source_path.split('/')[-1]
             current_path = 'data/IMG/' + filename
             image = cv2.imread(current_path)
             b,g,r = cv2.split(image)
             image = cv2.merge([r,g,b])
             images.append(image)
-            measurement = float(line[3])
+            measurement = float(batch_sample[3])
             measurements.append(measurement)
 
          # trim image to only see section with road
@@ -41,6 +44,7 @@ def generator(samples, batch_size=32):
 # compile and train the model using the generator function
 train_generator = generator(train_samples, batch_size=32)
 validation_generator = generator(validation_samples, batch_size=32)            
+
             
 #Model Architecture
 from keras.models import Sequential
