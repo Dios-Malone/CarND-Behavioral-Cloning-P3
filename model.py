@@ -52,7 +52,7 @@ validation_generator = generator(validation_samples, batch_size=32)
             
 #=====Model Architecture=====
 from keras.models import Sequential, load_model
-from keras.layers import Flatten, Dense, Lambda
+from keras.layers import Flatten, Dense, Lambda, Dropout
 from keras.layers.convolutional import Convolution2D
 from keras.layers.pooling import MaxPooling2D
 import os.path
@@ -83,9 +83,9 @@ else:
    #Flatten layer
    model.add(Flatten())
    #Three Fully connected layers
-   model.add(Dense(100), activation="relu")
+   model.add(Dense(100, activation="relu"))
    model.add(Dropout(0.5))
-   model.add(Dense(50), activation="relu")
+   model.add(Dense(50, activation="relu"))
    model.add(Dense(1))
    #Using MSE loss function and AdamOptimizer
    model.compile(loss='mse', optimizer='adam')
