@@ -47,29 +47,36 @@ validation_generator = generator(validation_samples, batch_size=32)
 
             
 #Model Architecture
-from keras.models import Sequential
+from keras.models import Sequential, load_model
 from keras.layers import Flatten, Dense, Lambda
 from keras.layers.convolutional import Convolution2D
 from keras.layers.pooling import MaxPooling2D
+import os.path
 
-model = Sequential()
-model.add(Lambda(lambda x: (x - 127.0)/255.0, input_shape=(160,320,3)))
-model.add(Convolution2D(24, 5, 2, activation="relu"))
-model.add(MaxPooling2D())
-model.add(Convolution2D(36, 5, 2, activation="relu"))
-model.add(MaxPooling2D())
-model.add(Convolution2D(48, 5, 2, activation="relu"))
-model.add(MaxPooling2D())
-model.add(Convolution2D(64, 5, 3, activation="relu"))
-model.add(MaxPooling2D())
-model.add(Convolution2D(64, 5, 3, activation="relu"))
-model.add(MaxPooling2D())
-model.add(Flatten())
-model.add(Dense(100))
-model.add(Dense(50))
-model.add(Dense(1))
+if os.path.isfile('model.h5'): 
+   # if a trained model exists, continue training based on the pre-trained model
+   model = load_model('model.h5')
+else:
+   # else create a new model and train it from scratch 
+   model = Sequential()
+   model.add(Lambda(lambda x: (x - 127.0)/255.0, input_shape=(160,320,3)))
+   model.add(Convolution2D(24, 5, 2, activation="relu"))
+   model.add(MaxPooling2D())
+   model.add(Convolution2D(36, 5, 2, activation="relu"))
+   model.add(MaxPooling2D())
+   model.add(Convolution2D(48, 5, 2, activation="relu"))
+   model.add(MaxPooling2D())
+   model.add(Convolution2D(64, 5, 3, activation="relu"))
+   model.add(MaxPooling2D())
+   model.add(Convolution2D(64, 5, 3, activation="relu"))
+   model.add(MaxPooling2D())
+   model.add(Flatten())
+   model.add(Dense(100))
+   model.add(Dense(50))
+   model.add(Dense(1))
 
-model.compile(loss='mse', optimizer='adam')
+   model.compile(loss='mse', optimizer='adam')
+   
 #model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=2)
 model.fit_generator(train_generator, samples_per_epoch=len(train_samples), validation_data = validation_generator, nb_val_samples=len(validation_samples), nb_epoch=2)
 
